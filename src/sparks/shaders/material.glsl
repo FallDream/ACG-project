@@ -2,6 +2,7 @@
 struct Material {
   vec3 albedo_color;
   int albedo_texture_id;
+  vec3 emittance; 
   uint material_type;
 };
 

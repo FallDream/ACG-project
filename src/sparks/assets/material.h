@@ -15,7 +15,7 @@ enum MaterialType : int {
 struct Material {
   glm::vec3 albedo_color{0.8f};
   int albedo_texture_id{0};
+  glm::vec3 emittance{0.0f};
   MaterialType material_type{MATERIAL_TYPE_LAMBERTIAN};
-  int reserve[3];
 };
 }  // namespace sparks

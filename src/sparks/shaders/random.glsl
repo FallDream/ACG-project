@@ -28,3 +28,7 @@ void InitRandomSeed(uint x, uint y, uint s) {
 float RandomFloat() {
   return float(WangHash(random_device.seed)) / 4294967296.0;
 }
+
+vec2 RandomPair() {
+  return vec2(RandomFloat(), RandomFloat());
+}

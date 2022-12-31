@@ -155,7 +155,7 @@ void App::OnInit() {
 
   LAND_INFO("Initializing ImGui.");
   core_->ImGuiInit(screen_frame_.get(), "../../fonts/NotoSansSC-Regular.otf",
-                   24.0f);
+                   24.0f); 
 
   LAND_INFO("Allocating visual pipeline buffers.");
   global_uniform_buffer_ =

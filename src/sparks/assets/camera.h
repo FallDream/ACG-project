@@ -16,6 +16,7 @@ class Camera {
                    float rand_r = 0.0f) const;
   bool ImGuiItems();
   void UpdateFov(float delta);
+  float getfov() { return fov_; }
 
  private:
   float fov_{60.0f};

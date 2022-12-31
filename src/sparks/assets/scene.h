@@ -19,6 +19,11 @@ class Scene {
   [[nodiscard]] int GetTextureCount() const;
   [[nodiscard]] std::vector<const char *> GetTextureNameList() const;
 
+  // a primitive rectangle that xy in [-1, 1], normal points towards +Z
+  int AddRectangle(Material mat, const glm::mat4 &to_world);
+  // A primitive Cube in [-1, 1]^3
+  int AddCube(Material mat, const glm::mat4 &to_world);
+
   template <class... Args>
   int AddEntity(Args... args) {
     entities_.emplace_back(args...);
@@ -54,7 +59,7 @@ class Scene {
   [[nodiscard]] const glm::vec3 &GetEnvmapMinorColor() const;
   [[nodiscard]] const glm::vec3 &GetEnvmapMajorColor() const;
   [[nodiscard]] const std::vector<float> &GetEnvmapCdf() const;
-  ;
+  
   [[nodiscard]] glm::vec4 SampleEnvmap(const glm::vec3 &direction) const;
 
   float TraceRay(const glm::vec3 &origin,
@@ -67,6 +72,8 @@ class Scene {
   bool EntityCombo(const char *label, int *current_item) const;
   int LoadTexture(const std::string &file_path);
   int LoadObjMesh(const std::string &file_path);
+
+  void CreateCornellBox();
 
  private:
   std::vector<Texture> textures_;

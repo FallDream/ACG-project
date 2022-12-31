@@ -5,8 +5,8 @@
 // clang-format off
 #include "ray_payload.glsl"
 #include "uniform_objects.glsl"
-#include "material.glsl"
 #include "constants.glsl"
+#include "material_op.glsl"
 // clang-format on
 
 layout(binding = 0) uniform accelerationStructureEXT scene;
@@ -37,7 +37,6 @@ layout(location = 0) rayPayloadEXT RayPayload ray_payload;
 // clang-format off
 #include "vertex.glsl"
 #include "hit_record.glsl"
-#include "random.glsl"
 // clang-format on
 
 vec3 SampleEnvmap(vec3 direction) {
@@ -70,26 +69,62 @@ void TraceRay(vec3 origin, vec3 direction) {
 vec3 SampleRay(vec3 origin, vec3 direction) {
   vec3 radiance = vec3(0.0);
   vec3 throughput = vec3(1.0);
+  float rr = 0.8;
   for (int b = 0; b < guo.num_bounces; b++) {
     TraceRay(origin, direction);
-
     if (ray_payload.t == -1.0) {
-      radiance += throughput * SampleEnvmap(direction);
+      // radiance += throughput * SampleEnvmap(direction);
       break;
     } else {
       Material material = materials[hit_record.hit_entity_id];
+      // TODO : Sample Lights
+      if (material.material_type == MATERIAL_TYPE_EMISSION) {
+        vec3 emittance = material.emittance;
+        float dist = distance(origin, hit_record.position);
+        radiance += emittance * throughput * max(0.f, dot(-direction, hit_record.normal)) / dist / dist;
+        break;
+      }
+      // return material.albedo_color *
+      //               vec3(texture(texture_samplers[material.albedo_texture_id],
+      //                            hit_record.tex_coord));
+      float rr_sample = RandomFloat();
+      if (rr_sample > rr) break;
+      // material reflectance
       throughput *= material.albedo_color *
                     vec3(texture(texture_samplers[material.albedo_texture_id],
                                  hit_record.tex_coord));
-      origin = hit_record.position;
-      direction = guo.envmap_light_direction;
-      radiance += throughput * guo.envmap_minor_color;
-      throughput *= max(dot(direction, hit_record.normal), 0.0) * 2.0;
-      TraceRay(origin, direction);
-      if (ray_payload.t < 0.0f) {
-        radiance += throughput * guo.envmap_major_color;
+      // absorb part of the light
+      throughput *= max(0.f, dot(-direction, hit_record.normal));
+      float pdf = 0.f;
+      vec3 out_direction;
+      SampleDirection(material, hit_record.normal, out_direction, pdf);
+      // BRDF
+      float brdf = EvalBRDF(material, hit_record.normal, direction, out_direction);
+      throughput *= brdf;
+      // pdf
+      if (pdf > 0.f) {
+        throughput /= pdf;
+      } else {
+        break;
       }
-      break;
+      // RR
+      throughput /= rr;
+
+      origin = hit_record.position;
+      direction = out_direction;
+
+
+      // throughput *= material.albedo_color *
+      //               vec3(texture(texture_samplers[material.albedo_texture_id],
+      //                            hit_record.tex_coord));
+      // origin = hit_record.position;
+      // direction = guo.envmap_light_direction;
+      // radiance += throughput * guo.envmap_minor_color;
+      // throughput *= max(dot(direction, hit_record.normal), 0.0) * 2.0;
+      // TraceRay(origin, direction);
+      // if (ray_payload.t < 0.0f) {
+      //   radiance += throughput * guo.envmap_major_color;
+      // }
     }
   }
   return radiance;
@@ -113,6 +148,9 @@ void main() {
     imageStore(accumulation_color, ivec2(gl_LaunchIDEXT.xy),
                imageLoad(accumulation_color, ivec2(gl_LaunchIDEXT.xy)) +
                    vec4(SampleRay(origin.xyz, direction.xyz), 1.0));
+    // imageStore(accumulation_color, ivec2(gl_LaunchIDEXT.xy),
+    //            imageLoad(accumulation_color, ivec2(gl_LaunchIDEXT.xy)) +
+    //                vec4(vec3(20.0f), 1.0));
     imageStore(accumulation_number, ivec2(gl_LaunchIDEXT.xy),
                imageLoad(accumulation_number, ivec2(gl_LaunchIDEXT.xy)) + 1.0);
   }
