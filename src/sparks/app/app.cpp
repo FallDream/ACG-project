@@ -167,6 +167,9 @@ void App::OnInit() {
   material_uniform_buffer_ =
       std::make_unique<vulkan::framework::DynamicBuffer<Material>>(core_.get(),
                                                                    16384);
+  light_buffer_ =
+      std::make_unique<vulkan::framework::DynamicBuffer<Light>>(core_.get(), 
+                                                                16384);                                                              
 
   std::vector<glm::vec2> vertices{
       {0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}};
@@ -314,6 +317,7 @@ void App::OnClose() {
   stencil_buffer_.reset();
   global_uniform_buffer_.reset();
   entity_uniform_buffer_.reset();
+  light_buffer_.reset();
   screen_frame_.reset();
   if (app_settings_.hardware_renderer) {
   } else {
@@ -544,13 +548,20 @@ void App::UpdateDynamicBuffer() {
   guo.accumulated_sample = accumulated_sample_;
   guo.num_samples = renderer_->GetRendererSettings().num_samples;
   guo.num_bounces = renderer_->GetRendererSettings().num_bounces;
-  global_uniform_buffer_->operator[](0) = guo;
   auto &entities = renderer_->GetScene().GetEntities();
+  int num_lights = 0;
   for (int i = 0; i < entities.size(); i++) {
     auto &entity = entities[i];
     entity_uniform_buffer_->operator[](i).model = entity.GetTransformMatrix();
     material_uniform_buffer_->operator[](i) = entity.GetMaterial();
+    if (entity.GetMaterial().material_type == MATERIAL_TYPE_EMISSION) {
+      light_buffer_->operator[](num_lights).index = i;
+      light_buffer_->operator[](num_lights).area = GetLightArea(entity.GetTransformMatrix());
+      ++num_lights;
+    }
   }
+  guo.num_lights = num_lights;
+  global_uniform_buffer_->operator[](0) = guo;
 }
 
 void App::UpdateHostStencilBuffer() {
@@ -709,6 +720,9 @@ void App::RebuildRenderNode() {
       VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
   render_node_->AddUniformBinding(binding_texture_samplers_,
                                   VK_SHADER_STAGE_FRAGMENT_BIT);
+  render_node_->AddBufferBinding(
+      light_buffer_.get(),
+      VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
   render_node_->AddColorAttachment(render_frame_.get());
   render_node_->AddDepthAttachment(depth_buffer_.get());
   render_node_->AddColorAttachment(
@@ -976,6 +990,8 @@ void App::BuildRayTracingPipeline() {
                                              VK_SHADER_STAGE_RAYGEN_BIT_KHR);
   ray_tracing_render_node_->AddUniformBinding(binding_texture_samplers_,
                                               VK_SHADER_STAGE_RAYGEN_BIT_KHR);
+  ray_tracing_render_node_->AddBufferBinding(light_buffer_.get(),
+                                             VK_SHADER_STAGE_RAYGEN_BIT_KHR);
   ray_tracing_render_node_->SetShaders("../../shaders/path_tracing.rgen.spv",
                                        "../../shaders/path_tracing.rmiss.spv",
                                        "../../shaders/path_tracing.rchit.spv");

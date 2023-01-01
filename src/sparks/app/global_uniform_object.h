@@ -15,5 +15,6 @@ struct GlobalUniformObject {
   int accumulated_sample{0};
   int num_samples{0};
   int num_bounces{0};
+  int num_lights{0};
 };
 }  // namespace sparks

@@ -12,6 +12,7 @@ struct GlobalUniformObject {
   int accumulated_sample;
   int num_samples;
   int num_bounces;
+  int num_lights;
 };
 
 struct EntityUniformObject {

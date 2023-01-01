@@ -13,7 +13,7 @@ void square_to_cosine_hemisphere(in vec2 sampled, out vec3 v) {
   // sample projected solid angle
   vec2 p;
   square_to_uniform_disk_concentric(sampled, p);
-  float z = safe_sqrt(1.f - length(p));
+  float z = safe_sqrt(1.f - dot(p, p));
   v = vec3(p.x, p.y, z);
 }
 

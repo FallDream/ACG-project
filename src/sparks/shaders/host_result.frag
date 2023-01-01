@@ -9,7 +9,9 @@ void main() {
   ivec2 pos = ivec2(gl_FragCoord.xy);
   ivec2 size = imageSize(accumulation_color);
   pos = max(ivec2(0), min(pos, size - ivec2(1, 1)));
-  out_color = vec4(imageLoad(accumulation_color, pos).xyz /
-                       max(imageLoad(accumulation_number, pos).r, 1.0),
-                   1.0);
+  vec4 color = vec4(imageLoad(accumulation_color, pos).xyz /
+                    max(imageLoad(accumulation_number, pos).r, 1.0),
+                1.0);
+  out_color = color;
+  // out_color = pow(color, vec4(1/2.2));
 }

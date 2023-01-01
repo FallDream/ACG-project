@@ -5,6 +5,7 @@
 #include "sparks/app/entity_uniform_object.h"
 #include "sparks/app/global_uniform_object.h"
 #include "sparks/app/object_info.h"
+#include "sparks/app/light.h"
 #include "sparks/renderer/renderer.h"
 
 namespace sparks {
@@ -52,6 +53,8 @@ class App {
       entity_uniform_buffer_;
   std::unique_ptr<vulkan::framework::DynamicBuffer<Material>>
       material_uniform_buffer_;
+  std::unique_ptr<vulkan::framework::DynamicBuffer<Light>>
+      light_buffer_;
 
   std::unique_ptr<vulkan::framework::RenderNode> host_result_render_node_;
   std::unique_ptr<vulkan::framework::TextureImage> accumulation_color_;
