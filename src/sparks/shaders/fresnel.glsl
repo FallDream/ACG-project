@@ -26,7 +26,11 @@ float fresnel_conductor(float cos_theta_i, vec2 eta_c) {
   return 0.5f * (r_s + r_p);
 }
 
-
+float fresnel(in float cos_theta_i, in float eta, out float cos_theta_t, 
+              out float eta_it, out float eta_ti) {
+  // TODO
+  return 0.f;
+}
 
 
 #endif 

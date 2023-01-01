@@ -11,8 +11,8 @@
 namespace sparks {
 
 Scene::Scene() {
-  CreateCornellBox();
-  return;
+  // CreateCornellBox();
+  // return;
   AddTexture(Texture(1, 1, glm::vec4{1.0f}, SAMPLE_TYPE_LINEAR), "Pure White");
   AddTexture(Texture(1, 1, glm::vec4{0.0f}, SAMPLE_TYPE_LINEAR), "Pure Black");
   Texture envmap;
@@ -32,8 +32,13 @@ Scene::Scene() {
 
   Texture texture;
   Texture::Load("../../textures/earth.jpg", texture);
+  // AddEntity(AcceleratedMesh(Mesh::Sphere(glm::vec3{0.0f, 0.0f, 0.0f}, 0.5f)),
+  //           Material{glm::vec3{1.0f}, AddTexture(texture, "Earth")},
+  //           glm::translate(glm::mat4{1.0f}, glm::vec3{0.0f, 0.5f, 0.0f}));
+  Material mf_conductor{glm::vec3{0.725f, 0.71f, 0.68f}, 0, glm::vec3{0.f}, 
+                        MATERIAL_TYPE_MICROFACET_CONDUCTOR, 0.46094, 2.97035};
   AddEntity(AcceleratedMesh(Mesh::Sphere(glm::vec3{0.0f, 0.0f, 0.0f}, 0.5f)),
-            Material{glm::vec3{1.0f}, AddTexture(texture, "Earth")},
+            mf_conductor,
             glm::translate(glm::mat4{1.0f}, glm::vec3{0.0f, 0.5f, 0.0f}));
 }
 

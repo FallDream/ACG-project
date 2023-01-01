@@ -30,7 +30,7 @@ void SampleDirectionMicrofacetConductor(Material mat, in vec3 normal, in vec3 in
   // Fresnel Factor
   float F = fresnel_conductor(dot(local_wi, local_m), eta_c);
 
-  /* specular reflectance omitted here */
+  weight *= mat.specular_reflectance;
   
   bsdf_by_pdf = F * weight;
   // Project back to local coordinate system
@@ -55,6 +55,6 @@ float MicrofacetConductorEvalBRDF(in Material mat, in vec3 normal, in vec3 in_di
   // Fresnel
   vec2 eta_c = vec2(mat.eta, mat.k);
   float F = fresnel_conductor(dot(local_wi, H), eta_c); 
-  /* ignore specular reflectance here */
+  result *= mat.specular_reflectance;
   return F * result;
 }

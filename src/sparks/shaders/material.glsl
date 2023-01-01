@@ -10,8 +10,10 @@ struct Material {
   float k;
   float alpha_u;
   float alpha_v;
-  float interior_iou;
-  float exterior_iou;
+  float interior_ior;
+  float exterior_ior;
+  float specular_reflectance;
+  float specular_transmittance;
 };
 
 #define MATERIAL_TYPE_LAMBERTIAN 0

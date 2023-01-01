@@ -23,9 +23,10 @@ struct Material {
   float k{1.0f};
   float alpha_u{0.1f};
   float alpha_v{0.1f};
-  float interior_iou{1.5046f}; // for bk7
-  float exterior_iou{1.000277f}; // for air
-  int reserved[2];
+  float interior_ior{1.5046f}; // for bk7
+  float exterior_ior{1.000277f}; // for air
+  float specular_reflectance{1.f};
+  float specular_transmittance{1.f};
 };
 
 }  // namespace sparks

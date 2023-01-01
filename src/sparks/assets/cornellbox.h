@@ -7,10 +7,10 @@ namespace sparks {
 void Scene::CreateCornellBox() {
   AddTexture(Texture(1, 1, glm::vec4{1.0f}, SAMPLE_TYPE_LINEAR), "Pure White");
   AddTexture(Texture(1, 1, glm::vec4{0.0f}, SAMPLE_TYPE_LINEAR), "Pure Black");
-  Texture envmap;
-  Texture::Load(u8"../../textures/envmap_clouds_4k.hdr", envmap);
-  envmap.SetSampleType(SAMPLE_TYPE_LINEAR);
-  envmap_id_ = AddTexture(envmap, "Clouds");
+  // Texture envmap;
+  // Texture::Load(u8"../../textures/envmap_clouds_4k.hdr", envmap);
+  // envmap.SetSampleType(SAMPLE_TYPE_LINEAR);
+  // envmap_id_ = AddTexture(envmap, "Clouds");
 
   // Adapted from Cornell Box on RenderingResources
   Material leftwall_brdf{glm::vec3{0.63f, 0.065f, 0.05f}, 0, glm::vec3{0.f}, MATERIAL_TYPE_LAMBERTIAN};
