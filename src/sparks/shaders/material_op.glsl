@@ -1,25 +1,27 @@
 #include "lambertian_material.glsl"
 #include "specular_material.glsl"
-#include "microfacet_material.glsl"
+#include "microfacet_conductor.glsl"
 
-void SampleDirection(in Material mat, in vec3 normal, in vec3 in_dir, out vec3 v, out float pdf) {
+// value: bsdf / pdf * cosine (fore-shortening term)
+void SampleDirection(in Material mat, in vec3 normal, in vec3 in_dir, out vec3 v, out float value) {
   if (mat.material_type == MATERIAL_TYPE_LAMBERTIAN) {
-    SampleDirectionLambertian(mat, normal, v, pdf);
+    SampleDirectionLambertian(mat, normal, in_dir, v, value);
   } else if (mat.material_type == MATERIAL_TYPE_SPECULAR) {
-    SampleDirectionSpecular(mat, normal, in_dir, v, pdf);
-  } else if (mat.material_type == MATERIAL_TYPE_MICROFACET) {
-    SampleDirectionMicrofacet(mat, normal, in_dir, v, pdf);
+    SampleDirectionSpecular(mat, normal, in_dir, v, value);
+  } else if (mat.material_type == MATERIAL_TYPE_MICROFACET_CONDUCTOR) {
+    SampleDirectionMicrofacetConductor(mat, normal, in_dir, v, value);
   } else {
     v = normal;
   }
 }
 
+// value: bsdf * cosine (fore_shortening term)
 float EvalBRDF(in Material mat, in vec3 normal, in vec3 in_dir, in vec3 out_dir) {
   if (mat.material_type == MATERIAL_TYPE_LAMBERTIAN) {
-    return INV_PI;
+    return max(0.f, dot(-in_dir, normal)) * INV_PI;
   } else if (mat.material_type == MATERIAL_TYPE_SPECULAR) {
-    return 1.f;
-  } else if (mat.material_type == MATERIAL_TYPE_MICROFACET) {
-    // TODO
+    return max(0.f, dot(-in_dir, normal));
+  } else if (mat.material_type == MATERIAL_TYPE_MICROFACET_CONDUCTOR) {
+    return MicrofacetConductorEvalBRDF(mat, normal, in_dir, out_dir);
   }
 }

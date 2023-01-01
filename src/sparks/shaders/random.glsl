@@ -1,3 +1,5 @@
+#ifndef RANDOM_H_
+#define RANDOM_H_
 
 struct RandomDevice {
   uint seed;
@@ -32,3 +34,5 @@ float RandomFloat() {
 vec2 RandomPair() {
   return vec2(RandomFloat(), RandomFloat());
 }
+
+#endif

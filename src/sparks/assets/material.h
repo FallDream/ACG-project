@@ -10,7 +10,8 @@ enum MaterialType : int {
   MATERIAL_TYPE_TRANSMISSIVE = 2,
   MATERIAL_TYPE_PRINCIPLED = 3,
   MATERIAL_TYPE_EMISSION = 4,
-  MATERIAL_TYPE_MICROFACET = 5
+  MATERIAL_TYPE_MICROFACET_CONDUCTOR = 5,
+  MATERIAL_TYPE_MICROFACET_DIELECTRIC = 6
 };
 
 struct Material {
@@ -18,5 +19,13 @@ struct Material {
   int albedo_texture_id{0};
   glm::vec3 emittance{0.0f};
   MaterialType material_type{MATERIAL_TYPE_LAMBERTIAN};
+  float eta{0.0f};
+  float k{1.0f};
+  float alpha_u{0.1f};
+  float alpha_v{0.1f};
+  float interior_iou{1.5046f}; // for bk7
+  float exterior_iou{1.000277f}; // for air
+  int reserved[2];
 };
+
 }  // namespace sparks

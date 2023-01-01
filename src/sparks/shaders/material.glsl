@@ -6,6 +6,12 @@ struct Material {
   int albedo_texture_id;
   vec3 emittance; 
   uint material_type;
+  float eta;
+  float k;
+  float alpha_u;
+  float alpha_v;
+  float interior_iou;
+  float exterior_iou;
 };
 
 #define MATERIAL_TYPE_LAMBERTIAN 0
@@ -13,6 +19,7 @@ struct Material {
 #define MATERIAL_TYPE_TRANSMISSIVE 2
 #define MATERIAL_TYPE_PRINCIPLED 3
 #define MATERIAL_TYPE_EMISSION 4
-#define MATERIAL_TYPE_MICROFACET 5
+#define MATERIAL_TYPE_MICROFACET_CONDUCTOR 5
+#define MATERIAL_TYPE_MICROFACET_DIELECTRIC 6
 
 #endif

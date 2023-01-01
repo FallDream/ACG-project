@@ -1,3 +1,6 @@
+#ifndef WARP_H_
+#define WARP_H_
+
 #include "constants.glsl"
 #include "math.glsl"
 
@@ -20,3 +23,5 @@ void square_to_cosine_hemisphere(in vec2 sampled, out vec3 v) {
 float square_to_cosine_hemisphere_pdf(in vec3 v) {
   return v.z * INV_PI;
 }
+
+#endif

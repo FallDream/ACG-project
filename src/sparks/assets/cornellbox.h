@@ -17,6 +17,9 @@ void Scene::CreateCornellBox() {
   Material rightwall_brdf{glm::vec3{0.14f, 0.45f, 0.091f}, 0, glm::vec3{0.f}, MATERIAL_TYPE_LAMBERTIAN};
   Material other_brdf{glm::vec3{0.725f, 0.71f, 0.68f}, 0, glm::vec3{0.f}, MATERIAL_TYPE_LAMBERTIAN};
   Material light_brdf{glm::vec3{0.0f}, 0, glm::vec3{17.f, 12.f, 4.f}, MATERIAL_TYPE_EMISSION};
+  Material specular{glm::vec3{0.725f, 0.71f, 0.68f}, 0, glm::vec3{0.f}, MATERIAL_TYPE_SPECULAR};
+  Material mf_conductor{glm::vec3{0.725f, 0.71f, 0.68f}, 0, glm::vec3{0.f}, 
+                        MATERIAL_TYPE_MICROFACET_CONDUCTOR, 0.46094, 2.97035};
 
   // Mitsuba are row major while glm are column-major, do a transpose for matracis
   // Camera orientation in sparks and Mitsuba are different, flip [2][2]
@@ -36,7 +39,7 @@ void Scene::CreateCornellBox() {
   // ShortBox
   AddCube(other_brdf, glm::transpose(glm::mat4{0.0851643, 0.289542, 1.31134e-008, 0.328631, 3.72265e-009, 1.26563e-008, -0.3, 0.3, -0.284951, 0.0865363, 5.73206e-016, 0.374592, 0, 0, 0, 1}));
   // TallBox
-  AddCube(other_brdf, glm::transpose(glm::mat4{0.286776, 0.098229, -2.29282e-015, -0.335439, -4.36233e-009, 1.23382e-008, -0.6, 0.6, -0.0997984, 0.282266, 2.62268e-008, -0.291415, 0, 0, 0, 1}));
+  AddCube(mf_conductor, glm::transpose(glm::mat4{0.286776, 0.098229, -2.29282e-015, -0.335439, -4.36233e-009, 1.23382e-008, -0.6, 0.6, -0.0997984, 0.282266, 2.62268e-008, -0.291415, 0, 0, 0, 1}));
   // Light
   AddRectangle(light_brdf, glm::transpose(glm::mat4{0.235, -1.66103e-008, -7.80685e-009, -0.005, -2.05444e-008, 3.90343e-009, -0.0893, 1.98, 2.05444e-008, 0.19, 8.30516e-009, -0.03, 0, 0, 0, 1}));
 }
