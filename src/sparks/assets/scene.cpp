@@ -7,12 +7,14 @@
 #include "sparks/util/util.h"
 
 #include "sparks/assets/cornellbox.h"
+#include "sparks/assets/mat_preview.h"
 
 namespace sparks {
 
 Scene::Scene() {
   // CreateCornellBox();
-  // return;
+  CreateMaterialPreviewScene();
+  return;
   AddTexture(Texture(1, 1, glm::vec4{1.0f}, SAMPLE_TYPE_LINEAR), "Pure White");
   AddTexture(Texture(1, 1, glm::vec4{0.0f}, SAMPLE_TYPE_LINEAR), "Pure Black");
   Texture envmap;
@@ -36,9 +38,11 @@ Scene::Scene() {
   //           Material{glm::vec3{1.0f}, AddTexture(texture, "Earth")},
   //           glm::translate(glm::mat4{1.0f}, glm::vec3{0.0f, 0.5f, 0.0f}));
   Material mf_conductor{glm::vec3{0.725f, 0.71f, 0.68f}, 0, glm::vec3{0.f}, 
-                        MATERIAL_TYPE_MICROFACET_CONDUCTOR, 0.46094, 2.97035};
+                        MATERIAL_TYPE_MICROFACET_CONDUCTOR};
+  Material mf_dielectric{glm::vec3{0.725f, 0.71f, 0.68f}, 0, glm::vec3{0.f}, 
+                        MATERIAL_TYPE_MICROFACET_DIELECTRIC};
   AddEntity(AcceleratedMesh(Mesh::Sphere(glm::vec3{0.0f, 0.0f, 0.0f}, 0.5f)),
-            mf_conductor,
+            mf_dielectric,
             glm::translate(glm::mat4{1.0f}, glm::vec3{0.0f, 0.5f, 0.0f}));
 }
 

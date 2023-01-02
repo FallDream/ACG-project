@@ -13,6 +13,7 @@ struct GlobalUniformObject {
   int num_samples;
   int num_bounces;
   int num_lights;
+  mat4 envmap_from_world;
 };
 
 struct EntityUniformObject {

@@ -55,4 +55,15 @@ void sincos_phi(in vec3 v, out float sin_phi, out float cos_phi) {
   }
 }
 
+/*
+wi: incident direction
+m: surface normal
+cos_theta_t: angle between normal and transmitted ray
+eta_ti: relative index of refraction, transmitted / incident 
+*/
+vec3 refract(in vec3 wi, in vec3 m, float cos_theta_t, float eta_ti) {
+  float tmp1 = dot(wi, m) * eta_ti + cos_theta_t;
+  return m * tmp1 - wi * eta_ti;
+}
+
 #endif

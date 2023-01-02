@@ -59,6 +59,9 @@ class Scene {
   [[nodiscard]] const glm::vec3 &GetEnvmapMinorColor() const;
   [[nodiscard]] const glm::vec3 &GetEnvmapMajorColor() const;
   [[nodiscard]] const std::vector<float> &GetEnvmapCdf() const;
+  [[nodiscard]] glm::mat4 GetEnvMapToWorld() const {
+    return envmap_to_world_;
+  }
   
   [[nodiscard]] glm::vec4 SampleEnvmap(const glm::vec3 &direction) const;
 
@@ -74,6 +77,7 @@ class Scene {
   int LoadObjMesh(const std::string &file_path);
 
   void CreateCornellBox();
+  void CreateMaterialPreviewScene();
 
  private:
   std::vector<Texture> textures_;
@@ -83,6 +87,7 @@ class Scene {
 
   int envmap_id_{0};
   float envmap_offset_{0.0f};
+  glm::mat4 envmap_to_world_{glm::mat4{1.f}};
   std::vector<float> envmap_cdf_;
   glm::vec3 envmap_light_direction_{0.0f, 1.0f, 0.0f};
   glm::vec3 envmap_major_color_{0.5f};

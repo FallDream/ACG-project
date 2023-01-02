@@ -16,5 +16,6 @@ struct GlobalUniformObject {
   int num_samples{0};
   int num_bounces{0};
   int num_lights{0};
+  glm::mat4 envmap_from_world{1.0f};
 };
 }  // namespace sparks

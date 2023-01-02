@@ -47,6 +47,7 @@ layout(location = 0) rayPayloadEXT RayPayload ray_payload;
 // clang-format on
 
 vec3 SampleEnvmap(vec3 direction) {
+  direction = normalize(mat3(guo.envmap_from_world) * direction);
   float x = guo.envmap_offset;
   float y = acos(direction.y) * INV_PI;
   if (length(vec2(direction.x, direction.y)) > 1e-4) {

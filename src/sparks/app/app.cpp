@@ -540,6 +540,7 @@ void App::UpdateDynamicBuffer() {
   guo.camera = glm::inverse(renderer_->GetScene().GetCameraToWorld());
   guo.envmap_id = renderer_->GetScene().GetEnvmapId();
   guo.envmap_offset = renderer_->GetScene().GetEnvmapOffset();
+  guo.envmap_from_world = glm::inverse(renderer_->GetScene().GetEnvMapToWorld());
   guo.hover_id = hover_entity_id_;
   guo.selected_id = selected_entity_id_;
   guo.envmap_light_direction = renderer_->GetScene().GetEnvmapLightDirection();
