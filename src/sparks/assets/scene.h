@@ -21,6 +21,8 @@ class Scene {
 
   // a primitive rectangle that xy in [-1, 1], normal points towards +Z
   int AddRectangle(Material mat, const glm::mat4 &to_world);
+  // a primitive rectangle that xy in [-10, 10], normal points towards +Z
+  int AddBiiigRectangle(Material mat, const glm::mat4 &to_world);
   // A primitive Cube in [-1, 1]^3
   int AddCube(Material mat, const glm::mat4 &to_world);
 

@@ -7,6 +7,11 @@ void Scene::CreateMaterialPreviewScene() {
   SetCameraToWorld(glm::transpose(glm::mat4{-0.721367, -0.373123, 0.583445, 3.04068, -8.26273e-008, 0.842456, 0.538765, 3.17153, 0.692553, -0.388647, 0.60772, 3.20454, 0, 0, 0, 1}));
   float cur_fov = GetCamera().getfov();
   GetCamera().UpdateFov(35 - cur_fov);
+
+  Texture ice_texture;
+  Texture::Load("../../textures/ice.jpg", ice_texture);
+  int ice_id = AddTexture(ice_texture, "ice");
+
   Material Specular{
     glm::vec3{1.0f},
     0,
@@ -53,17 +58,23 @@ void Scene::CreateMaterialPreviewScene() {
     glm::vec3{0.f},
     MATERIAL_TYPE_LAMBERTIAN
   };
+  // Material Floor {
+  //   glm::vec3{0.325, 0.31, 0.25}, //albedo_color
+  //   0,
+  //   glm::vec3{0.f},
+  //   MATERIAL_TYPE_LAMBERTIAN
+  // };
   Material Floor {
-    glm::vec3{0.325, 0.31, 0.25}, //albedo_color
-    0,
+    glm::vec3{1.0f}, //albedo_color
+    ice_id,
     glm::vec3{0.f},
-    MATERIAL_TYPE_LAMBERTIAN
+    MATERIAL_TYPE_SPECULAR
   };
 
   Material mat_to_use = RoughDielectric;
 
   // Floor
-  AddRectangle(Floor, glm::transpose(glm::mat4{-1.88298, 1.9602, 2.50299e-007, -0.708772, -2.37623e-007, 1.18811e-007, -2.71809, 0, -1.9602, -1.88298, 8.90586e-008, -0.732108, 0, 0, 0, 1}));
+  AddBiiigRectangle(Floor, glm::transpose(glm::mat4{-1.88298, 1.9602, 2.50299e-007, -0.708772, -2.37623e-007, 1.18811e-007, -2.71809, 0, -1.9602, -1.88298, 8.90586e-008, -0.732108, 0, 0, 0, 1}));
   AddEntity(
       AcceleratedMesh({{{-1.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}, // position, normal, tex
                        {{-1.0f, 0.0f, -1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}},   

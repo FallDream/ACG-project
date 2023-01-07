@@ -55,6 +55,15 @@ int Scene::AddRectangle(Material mat, const glm::mat4 &to_world) {
       mat, to_world);
 }
 
+int Scene::AddBiiigRectangle(Material mat, const glm::mat4 &to_world) {
+  return AddEntity(AcceleratedMesh({{{-10.0f, 10.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
+                                    {{-10.0f, -10.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 10.0f}},
+                                    {{10.0f, 10.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {10.0f, 0.0f}},
+                                    {{10.0f, -10.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {10.0f, 10.0f}}},
+                                   {0, 1, 2, 2, 1, 3}),
+      mat, to_world);
+}
+
 int Scene::AddCube(Material mat, const glm::mat4 &to_world) {
   return AddEntity(AcceleratedMesh({{{-1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // top 0
                                     {{-1.0f, -1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}}, // top 1
