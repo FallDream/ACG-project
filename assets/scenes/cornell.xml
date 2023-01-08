@@ -19,8 +19,8 @@
         <index value="1"/>
         <index value="3"/>
         <index value="1"/>
-        <index value="3"/>
         <index value="2"/>
+        <index value="3"/>
 
         <material type="emission">
             <emission value="1.0 1.0 1.0"/>

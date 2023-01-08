@@ -12,11 +12,11 @@
 namespace sparks {
 
 Scene::Scene() {
-  // CreateCornellBox();
-  CreateMaterialPreviewScene();
-  return;
   AddTexture(Texture(1, 1, glm::vec4{1.0f}, SAMPLE_TYPE_LINEAR), "Pure White");
   AddTexture(Texture(1, 1, glm::vec4{0.0f}, SAMPLE_TYPE_LINEAR), "Pure Black");
+  // CreateCornellBox();
+  // CreateMaterialPreviewScene();
+  return;
   Texture envmap;
   Texture::Load(u8"../../textures/envmap_clouds_4k.hdr", envmap);
   envmap.SetSampleType(SAMPLE_TYPE_LINEAR);
@@ -382,6 +382,14 @@ int Scene::LoadObjMesh(const std::string &file_path) {
 }
 
 Scene::Scene(const std::string &filename) : Scene() {
+  if (filename == "mat_preview") {
+    CreateMaterialPreviewScene();
+    return;
+  }
+  if (filename == "my_cornell_box") {
+    CreateCornellBox();
+    return;
+  }
   auto doc = std::make_unique<tinyxml2::XMLDocument>();
   doc->LoadFile(filename.c_str());
   tinyxml2::XMLElement *rootElement = doc->RootElement();
@@ -434,7 +442,7 @@ Scene::Scene(const std::string &filename) : Scene() {
 
       auto grandchild_element = child_element->FirstChildElement("material");
       if (grandchild_element) {
-        material = Material(this, grandchild_element);
+        material = NewMaterial(this, grandchild_element);
       }
 
       glm::mat4 transformation = XmlComposeTransformMatrix(child_element);

@@ -18,17 +18,18 @@ std::unordered_map<std::string, MaterialType> material_name_map{
     {"microfacet_dielectric", MATERIAL_TYPE_MICROFACET_DIELECTRIC}};
 }
 
-Material::Material(Scene *scene, const tinyxml2::XMLElement *material_element)
-    : Material() {
+Material NewMaterial(Scene *scene, const tinyxml2::XMLElement *material_element)
+{
+  Material mat{};
   if (!material_element) {
-    return;
+    return mat;
   }
 
-  albedo_color = glm::vec3{1.0f};
+  mat.albedo_color = glm::vec3{1.0f};
 
   auto child_element = material_element->FirstChildElement("albedo");
   if (child_element) {
-    albedo_color = StringToVec3(child_element->FindAttribute("value")->Value());
+    mat.albedo_color = StringToVec3(child_element->FindAttribute("value")->Value());
   }
 
   child_element = material_element->FirstChildElement("albedo_texture");
@@ -36,21 +37,21 @@ Material::Material(Scene *scene, const tinyxml2::XMLElement *material_element)
     std::string path = child_element->FindAttribute("value")->Value();
     Texture albedo_texture(1, 1);
     if (Texture::Load(path, albedo_texture)) {
-      albedo_texture_id =
+      mat.albedo_texture_id =
           scene->AddTexture(albedo_texture, PathToFilename(path));
     }
   }
 
   child_element = material_element->FirstChildElement("emission");
   if (child_element) {
-    emittance = StringToVec3(child_element->FindAttribute("value")->Value());
+    mat.emittance = StringToVec3(child_element->FindAttribute("value")->Value());
   }
 
   child_element = material_element->FirstChildElement("emission_strength");
   if (child_element) {
     // emission_strength =
     //     std::stof(child_element->FindAttribute("value")->Value());
-    emittance *= std::stof(child_element->FindAttribute("value")->Value());
+    mat.emittance *= std::stof(child_element->FindAttribute("value")->Value());
   }
 
   // child_element = material_element->FirstChildElement("alpha");
@@ -58,11 +59,9 @@ Material::Material(Scene *scene, const tinyxml2::XMLElement *material_element)
   //   alpha = std::stof(child_element->FindAttribute("value")->Value());
   // }
 
-  material_type =
+  mat.material_type =
       material_name_map[material_element->FindAttribute("type")->Value()];
+  return mat;
 }
 
-Material::Material(const glm::vec3 &albedo) : Material() {
-  albedo_color = albedo;
-}
 }  // namespace sparks

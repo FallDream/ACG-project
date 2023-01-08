@@ -1,9 +1,7 @@
 namespace sparks{
 
 void Scene::CreateMaterialPreviewScene() {
-  AddTexture(Texture(1, 1, glm::vec4{1.0f}, SAMPLE_TYPE_LINEAR), "Pure White");
-  AddTexture(Texture(1, 1, glm::vec4{0.0f}, SAMPLE_TYPE_LINEAR), "Pure Black");
-  // SetCameraToWorld(glm::transpose(glm::mat4{-0.721367, -0.373123, -0.583445, 3.04068, -8.26273e-008, 0.842456, -0.538765, 3.17153, 0.692553, -0.388647, -0.60772, 3.20454, 0, 0, 0, 1}));
+  SetCameraToWorld(glm::transpose(glm::mat4{-0.721367, -0.373123, -0.583445, 3.04068, -8.26273e-008, 0.842456, -0.538765, 3.17153, 0.692553, -0.388647, -0.60772, 3.20454, 0, 0, 0, 1}));
   SetCameraToWorld(glm::transpose(glm::mat4{-0.721367, -0.373123, 0.583445, 3.04068, -8.26273e-008, 0.842456, 0.538765, 3.17153, 0.692553, -0.388647, 0.60772, 3.20454, 0, 0, 0, 1}));
   float cur_fov = GetCamera().getfov();
   GetCamera().UpdateFov(35 - cur_fov);

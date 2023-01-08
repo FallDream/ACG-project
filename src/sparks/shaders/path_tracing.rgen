@@ -85,8 +85,20 @@ void SampleLight(out vec3 position, out int entity_index, out float pdf) {
       entity_index = int(lights[j].index);
       pdf = 1.0 / total_area;
       mat4 to_world = entity_objects[entity_index].model;
-      vec2 rn_pos = RandomPair();
-      vec4 a = vec4(-1.0 + 2.0 * rn_pos.x, -1.0 + 2.0 * rn_pos.y, 0.0, 1.0); // sample on the original rectangle
+      vec3 rn_pos = RandomTuple();
+      // here, we assume that the light is an axis-aligned rectangle
+      // i.e. one of its coordinates are the same
+      // the other two are (a,b), (A,b), (a,B), (A,B)
+      ObjectInfo object_info = object_infos[entity_index];
+      Vertex v0 = GetVertex(object_info.vertex_offset + 0);
+      Vertex v1 = GetVertex(object_info.vertex_offset + 1);
+      Vertex v2 = GetVertex(object_info.vertex_offset + 2);
+      Vertex v3 = GetVertex(object_info.vertex_offset + 3);
+      vec3 mx = max(max(v0.position, v1.position), max(v2.position, v3.position));
+      vec3 mn = min(min(v0.position, v1.position), min(v2.position, v3.position));
+      vec4 a = vec4(mn.x + rn_pos.x * (mx.x - mn.x), 
+                    mn.y + rn_pos.y * (mx.y - mn.y),
+                    mn.z + rn_pos.z * (mx.z - mn.z), 1.0); // sample on the original rectangle
       a = to_world * a;
       position = a.xyz / a.w;
       break;
@@ -108,7 +120,6 @@ vec3 SampleRay(vec3 origin, vec3 direction) {
       break;
     } else {
       Material material = materials[hit_record.hit_entity_id];
-<<<<<<< HEAD
 
       // directly hit a light
       if (material.material_type == MATERIAL_TYPE_EMISSION) {
@@ -142,6 +153,14 @@ vec3 SampleRay(vec3 origin, vec3 direction) {
           vec3 emittance = light_material.emittance;
           radiance += emittance * throughput * max(0.f, dot(-light_dir, temp_hit_record.normal)) 
                       * EvalBRDF(material, hit_record.normal, direction, light_dir) / dist / dist / light_pdf;
+        } else {
+          // if (temp_hit_record.hit_entity_id != light_id) {
+          //   return vec3(1.0, 0.0, 0.0);
+          // } else if (!temp_hit_record.front_face){
+          //   return vec3(0.0, 1.0, 0.0);
+          // } else {
+          //   return vec3(0.0, 0.0, 1.0);
+          // }
         }
         allow_light = false;
       } else {
@@ -174,25 +193,6 @@ vec3 SampleRay(vec3 origin, vec3 direction) {
       // if (ray_payload.t < 0.0f) {
       //   radiance += throughput * guo.envmap_major_color;
       // }
-=======
-      if (material.material_type == MATERIAL_TYPE_EMISSION) {
-        radiance += throughput * material.emission * material.emission_strength;
-        break;
-      } else {
-        throughput *= material.albedo_color *
-                      vec3(texture(texture_samplers[material.albedo_texture_id],
-                                   hit_record.tex_coord));
-        origin = hit_record.position;
-        direction = guo.envmap_light_direction;
-        radiance += throughput * guo.envmap_minor_color;
-        throughput *= max(dot(direction, hit_record.normal), 0.0) * 2.0;
-        TraceRay(origin, direction);
-        if (ray_payload.t < 0.0f) {
-          radiance += throughput * guo.envmap_major_color;
-        }
-        break;
-      }
->>>>>>> adb9127d46682e25048ef115cd7e0d67e4a38d61
     }
   }
   return radiance;

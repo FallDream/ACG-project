@@ -30,9 +30,8 @@ struct Material {
   float exterior_ior{1.000277f}; // for air
   float specular_reflectance{1.f};
   float specular_transmittance{1.f};
-  Material() = default;
-  explicit Material(const glm::vec3 &albedo);
-  Material(Scene *scene, const tinyxml2::XMLElement *material_element);
 };
+
+Material NewMaterial(Scene *scene, const tinyxml2::XMLElement *material_element);
 
 }  // namespace sparks

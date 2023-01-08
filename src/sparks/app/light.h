@@ -7,14 +7,13 @@ struct Light {
   float area;
 };
 
-inline float GetLightArea(const glm::mat4 &to_world) {
+inline float GetLightArea(const std::vector<Vertex> &vertices, const glm::mat4 &to_world) {
   // two offset vectors
-  glm::vec4 a(0.0f, 2.0f, 0.0f, 0.0f);
-  glm::vec4 b(2.0f, 0.0f, 0.0f, 0.0f);
+  glm::vec4 a(vertices[1].position - vertices[0].position, 0.f);
+  glm::vec4 b(vertices[2].position - vertices[0].position, 0.f);
   a = to_world * a;
   b = to_world * b;
-  float cos = dot(a, b);
-  return length(a) * length(b) * std::sqrt(1.0 - cos * cos);
+  return glm::length(glm::cross(glm::vec3(a), glm::vec3(b)));
 }
 
 }  // namespace sparks

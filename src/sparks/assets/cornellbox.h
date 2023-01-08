@@ -5,8 +5,6 @@
 
 namespace sparks {
 void Scene::CreateCornellBox() {
-  AddTexture(Texture(1, 1, glm::vec4{1.0f}, SAMPLE_TYPE_LINEAR), "Pure White");
-  AddTexture(Texture(1, 1, glm::vec4{0.0f}, SAMPLE_TYPE_LINEAR), "Pure Black");
   // Texture envmap;
   // Texture::Load(u8"../../textures/envmap_clouds_4k.hdr", envmap);
   // envmap.SetSampleType(SAMPLE_TYPE_LINEAR);

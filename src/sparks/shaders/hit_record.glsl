@@ -33,6 +33,9 @@ HitRecord GetHitRecord(RayPayload ray_payload, vec3 origin, vec3 direction) {
   hit_record.geometry_normal =
       normalize(transpose(inverse(object_to_world)) *
                 cross(v1.position - v0.position, v2.position - v0.position));
+    // hit_record.geometry_normal =
+    //   normalize(object_to_world *
+    //             cross(v1.position - v0.position, v2.position - v0.position));
   hit_record.tangent =
       normalize(object_to_world * mat3(v0.tangent, v1.tangent, v2.tangent) *
                 ray_payload.barycentric);
@@ -52,5 +55,8 @@ HitRecord GetHitRecord(RayPayload ray_payload, vec3 origin, vec3 direction) {
     hit_record.tangent = -hit_record.tangent;
   }
 
+  // hit_record.normal = hit_record.geometry_normal;
+  // hit_record.front_face = true;
+  
   return hit_record;
 }

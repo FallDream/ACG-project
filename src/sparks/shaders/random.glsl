@@ -35,4 +35,8 @@ vec2 RandomPair() {
   return vec2(RandomFloat(), RandomFloat());
 }
 
+vec3 RandomTuple() {
+  return vec3(RandomFloat(), RandomFloat(), RandomFloat());
+}
+
 #endif

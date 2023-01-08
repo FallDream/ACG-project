@@ -25,7 +25,7 @@ glm::vec3 PathTracer::SampleRay(glm::vec3 origin,
       auto &material =
           scene_->GetEntity(hit_record.hit_entity_id).GetMaterial();
       if (material.material_type == MATERIAL_TYPE_EMISSION) {
-        radiance += throughput * material.emission * material.emission_strength;
+        // radiance += throughput * material.emission * material.emission_strength;
         break;
       } else {
         throughput *=

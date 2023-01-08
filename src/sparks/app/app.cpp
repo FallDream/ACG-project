@@ -18,7 +18,7 @@ App::App(Renderer *renderer, const AppSettings &app_settings) {
   core_settings.window_height = app_settings_.height;
   core_settings.validation_layer = app_settings_.validation_layer;
   core_settings.raytracing_pipeline_required = app_settings_.hardware_renderer;
-  core_settings.selected_device = app_settings.selected_device;
+  // core_settings.selected_device = app_settings.selected_device;
   core_ = std::make_unique<vulkan::framework::Core>(core_settings);
 }
 
@@ -441,13 +441,13 @@ void App::UpdateImGui() {
       reset_accumulation_ |=
           scene.TextureCombo("Albedo Texture", &material.albedo_texture_id);
       reset_accumulation_ |= ImGui::ColorEdit3(
-          "Emission", &material.emission[0],
+          "Emission", &material.emittance[0],
           ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_Float);
-      reset_accumulation_ |=
-          ImGui::SliderFloat("Emission Strength", &material.emission_strength,
-                             0.0f, 1e5f, "%.3f", ImGuiSliderFlags_Logarithmic);
-      reset_accumulation_ |=
-          ImGui::SliderFloat("Alpha", &material.alpha, 0.0f, 1.0f, "%.3f");
+      // reset_accumulation_ |=
+      //     ImGui::SliderFloat("Emission Strength", &material.emission_strength,
+      //                        0.0f, 1e5f, "%.3f", ImGuiSliderFlags_Logarithmic);
+      // reset_accumulation_ |=
+      //     ImGui::SliderFloat("Alpha", &material.alpha, 0.0f, 1.0f, "%.3f");
     }
 
 #if !defined(NDEBUG)
@@ -582,7 +582,8 @@ void App::UpdateDynamicBuffer() {
     material_uniform_buffer_->operator[](i) = entity.GetMaterial();
     if (entity.GetMaterial().material_type == MATERIAL_TYPE_EMISSION) {
       light_buffer_->operator[](num_lights).index = i;
-      light_buffer_->operator[](num_lights).area = GetLightArea(entity.GetTransformMatrix());
+      std::vector<Vertex> light_vertices = entities[i].GetModel()->GetVertices();
+      light_buffer_->operator[](num_lights).area = GetLightArea(light_vertices, entity.GetTransformMatrix());
       ++num_lights;
     }
   }
