@@ -108,6 +108,7 @@ vec3 SampleRay(vec3 origin, vec3 direction) {
       break;
     } else {
       Material material = materials[hit_record.hit_entity_id];
+<<<<<<< HEAD
 
       // directly hit a light
       if (material.material_type == MATERIAL_TYPE_EMISSION) {
@@ -173,6 +174,25 @@ vec3 SampleRay(vec3 origin, vec3 direction) {
       // if (ray_payload.t < 0.0f) {
       //   radiance += throughput * guo.envmap_major_color;
       // }
+=======
+      if (material.material_type == MATERIAL_TYPE_EMISSION) {
+        radiance += throughput * material.emission * material.emission_strength;
+        break;
+      } else {
+        throughput *= material.albedo_color *
+                      vec3(texture(texture_samplers[material.albedo_texture_id],
+                                   hit_record.tex_coord));
+        origin = hit_record.position;
+        direction = guo.envmap_light_direction;
+        radiance += throughput * guo.envmap_minor_color;
+        throughput *= max(dot(direction, hit_record.normal), 0.0) * 2.0;
+        TraceRay(origin, direction);
+        if (ray_payload.t < 0.0f) {
+          radiance += throughput * guo.envmap_major_color;
+        }
+        break;
+      }
+>>>>>>> adb9127d46682e25048ef115cd7e0d67e4a38d61
     }
   }
   return radiance;

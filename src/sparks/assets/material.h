@@ -1,6 +1,7 @@
 #pragma once
 #include "cstdint"
 #include "glm/glm.hpp"
+#include "sparks/assets/util.h"
 
 namespace sparks {
 
@@ -13,6 +14,8 @@ enum MaterialType : int {
   MATERIAL_TYPE_MICROFACET_CONDUCTOR = 5,
   MATERIAL_TYPE_MICROFACET_DIELECTRIC = 6
 };
+
+class Scene;
 
 struct Material {
   glm::vec3 albedo_color{0.8f};
@@ -27,6 +30,9 @@ struct Material {
   float exterior_ior{1.000277f}; // for air
   float specular_reflectance{1.f};
   float specular_transmittance{1.f};
+  Material() = default;
+  explicit Material(const glm::vec3 &albedo);
+  Material(Scene *scene, const tinyxml2::XMLElement *material_element);
 };
 
 }  // namespace sparks
