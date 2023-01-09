@@ -61,7 +61,8 @@ class Renderer {
 
   RendererSettings renderer_settings_;
   // Scene scene_{"../../scenes/cornell.xml"};
-  Scene scene_{"mat_preview"};
+  Scene scene_{"../../scenes/cornell_specular.xml"};
+  // Scene scene_{"mat_preview"};
   // Scene scene_{"my_cornell_box"};
 
   /* CPU Renderer Assets */
