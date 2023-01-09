@@ -21,9 +21,9 @@ void SampleDirection(in Material mat, in vec3 normal, in vec3 in_dir, out vec3 v
 // value: bsdf * cosine (fore_shortening term)
 float EvalBRDF(in Material mat, in vec3 normal, in vec3 in_dir, in vec3 out_dir) {
   if (mat.material_type == MATERIAL_TYPE_LAMBERTIAN) {
-    return max(0.f, dot(-in_dir, normal)) * INV_PI;
+    return max(0.f, dot(out_dir, normal)) * INV_PI;
   } else if (mat.material_type == MATERIAL_TYPE_SPECULAR) {
-    return max(0.f, dot(-in_dir, normal));
+    return 1.0; // no fresnel, reflect all radiance?
   } else if (mat.material_type == MATERIAL_TYPE_MICROFACET_CONDUCTOR) {
     return MicrofacetConductorEvalBRDF(mat, normal, in_dir, out_dir);
   } else if (mat.material_type == MATERIAL_TYPE_MICROFACET_DIELECTRIC) {
