@@ -170,7 +170,7 @@ vec3 SampleRay(vec3 origin, vec3 direction) {
       if (rr_sample > rr) break;
 
       // value = bsdf / pdf * cosine
-      float value = 0.f;
+      vec3 value = vec3(0.f);
       vec3 out_direction;
       SampleDirection(material, hit_record.normal, direction, out_direction, value);
       throughput *= value;

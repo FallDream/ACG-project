@@ -10,10 +10,10 @@ struct Material {
   float k;
   float alpha_u;
   float alpha_v;
+  vec3 specular_reflectance;
   float interior_ior;
+  vec3 specular_transmittance;
   float exterior_ior;
-  float specular_reflectance;
-  float specular_transmittance;
 };
 
 #define MATERIAL_TYPE_LAMBERTIAN 0

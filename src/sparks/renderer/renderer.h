@@ -61,9 +61,10 @@ class Renderer {
 
   RendererSettings renderer_settings_;
   // Scene scene_{"../../scenes/cornell.xml"};
-  Scene scene_{"../../scenes/cornell_specular.xml"};
+  // Scene scene_{"../../scenes/cornell_specular.xml"};
   // Scene scene_{"mat_preview"};
   // Scene scene_{"my_cornell_box"};
+  Scene scene_{"car"};
 
   /* CPU Renderer Assets */
   std::vector<glm::vec4> accumulation_color_;

@@ -2,7 +2,7 @@
 #include "material.glsl"
 #include "fresnel.glsl"
 
-void SampleDirectionMicrofacetDielectric(Material mat, in vec3 normal, in vec3 in_dir, out vec3 v, out float value) {
+void SampleDirectionMicrofacetDielectric(Material mat, in vec3 normal, in vec3 in_dir, out vec3 v, out vec3 value) {
   float int_ior = mat.interior_ior;
   float ext_ior = mat.exterior_ior;
   float m_eta = int_ior / ext_ior;
@@ -28,7 +28,8 @@ void SampleDirectionMicrofacetDielectric(Material mat, in vec3 normal, in vec3 i
   float cos_theta_t, eta_it, eta_ti;
   float F = fresnel(dot(local_wi, local_m), m_eta, cos_theta_t, eta_it, eta_ti);
   // Select the lobe to be sampled
-  float rn1 = RandomFloat(), weight = 1.0f, eta;
+  float rn1 = RandomFloat(), eta;
+  vec3 weight = vec3(1.0f);
   bool selected_r = false, selected_t = false;
   if (rn1 <= F) {
     selected_r = true;
@@ -52,7 +53,7 @@ void SampleDirectionMicrofacetDielectric(Material mat, in vec3 normal, in vec3 i
   if (selected_t) {
     local_wo = refract(local_wi, local_m, cos_theta_t, eta_ti);
     // Solid angle compression
-    float factor = sqr(eta_ti);
+    vec3 factor = vec3(sqr(eta_ti));
     factor *= mat.specular_transmittance;
     weight *= factor;
     dwh_dwo = (sqr(eta) * dot(local_wo, local_m)) /
@@ -65,7 +66,7 @@ void SampleDirectionMicrofacetDielectric(Material mat, in vec3 normal, in vec3 i
   v = local_x * local_wo.x + local_y * local_wo.y + normal * local_wo.z;
 }
 
-float MicrofacetDielectricEvalBRDF(in Material mat, in vec3 normal, in vec3 in_dir, in vec3 wo) {
+vec3 MicrofacetDielectricEvalBRDF(in Material mat, in vec3 normal, in vec3 in_dir, in vec3 wo) {
   vec3 wi = -in_dir;
 
   vec3 local_x, local_y;
@@ -106,14 +107,14 @@ float MicrofacetDielectricEvalBRDF(in Material mat, in vec3 normal, in vec3 in_d
   float F = fresnel(dot(local_wi, local_m), m_eta, cos_theta_t, eta_it, eta_ti);
   float G = smith_G(mat, local_wi, local_wo, local_m);
 
-  float value;
+  vec3 value;
   if (reflect) {
-    value = F * D * G / (4.f * abs(cos_theta_i));
+    value = vec3(F * D * G / (4.f * abs(cos_theta_i)));
     value *= mat.specular_reflectance;
   } else {
     float scale = sqr(inv_eta);
-    value = abs((scale * (1.f - F) * D * G * eta * eta * dot(local_wi, local_m) * dot(local_wo, local_m)) /
-                (cos_theta_i * sqr(dot(local_wi, local_m) + eta * dot(local_wo, local_m))));
+    value = vec3(abs((scale * (1.f - F) * D * G * eta * eta * dot(local_wi, local_m) * dot(local_wo, local_m)) /
+                     (cos_theta_i * sqr(dot(local_wi, local_m) + eta * dot(local_wo, local_m)))));
     value *= mat.specular_transmittance;
   }
   return value;

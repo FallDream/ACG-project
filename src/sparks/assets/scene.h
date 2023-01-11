@@ -81,6 +81,7 @@ class Scene {
 
   void CreateCornellBox();
   void CreateMaterialPreviewScene();
+  void CreateCarScene();
 
  private:
   std::vector<Texture> textures_;

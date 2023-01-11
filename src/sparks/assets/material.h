@@ -18,7 +18,7 @@ enum MaterialType : int {
 class Scene;
 
 struct Material {
-  glm::vec3 albedo_color{0.8f};
+  glm::vec3 albedo_color{1.0f};
   int albedo_texture_id{0};
   glm::vec3 emittance{0.0f};
   MaterialType material_type{MATERIAL_TYPE_LAMBERTIAN};
@@ -26,10 +26,10 @@ struct Material {
   float k{1.0f};
   float alpha_u{0.1f};
   float alpha_v{0.1f};
+  glm::vec3 specular_reflectance{1.f};
   float interior_ior{1.5046f}; // for bk7
+  glm::vec3 specular_transmittance{1.f};
   float exterior_ior{1.000277f}; // for air
-  float specular_reflectance{1.f};
-  float specular_transmittance{1.f};
 };
 
 Material NewMaterial(Scene *scene, const tinyxml2::XMLElement *material_element);

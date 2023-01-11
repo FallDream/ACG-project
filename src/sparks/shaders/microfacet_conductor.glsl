@@ -4,7 +4,7 @@
 #include "fresnel.glsl"
 
 // For microfacet material, emittance[0] will be the roughness
-void SampleDirectionMicrofacetConductor(Material mat, in vec3 normal, in vec3 in_dir, out vec3 v, out float bsdf_by_pdf) {
+void SampleDirectionMicrofacetConductor(Material mat, in vec3 normal, in vec3 in_dir, out vec3 v, out vec3 bsdf_by_pdf) {
   vec3 wi = -in_dir;
 
   // Step0: project into local frame
@@ -24,7 +24,7 @@ void SampleDirectionMicrofacetConductor(Material mat, in vec3 normal, in vec3 in
     pdf = 0.f;
   }
   vec2 eta_c = vec2(mat.eta, mat.k);
-  float weight = smith_g1(mat, local_wo, local_m);
+  vec3 weight = vec3(smith_g1(mat, local_wo, local_m));
   // Jacobian of half-direction mapping
   pdf /= 4.f * dot(local_wo, local_m);
   // Fresnel Factor
@@ -37,7 +37,7 @@ void SampleDirectionMicrofacetConductor(Material mat, in vec3 normal, in vec3 in
   v = local_x * local_wo.x + local_y * local_wo.y + normal * local_wo.z;
 }
 
-float MicrofacetConductorEvalBRDF(in Material mat, in vec3 normal, in vec3 in_dir, in vec3 wo) {
+vec3 MicrofacetConductorEvalBRDF(in Material mat, in vec3 normal, in vec3 in_dir, in vec3 wo) {
   vec3 wi = -in_dir;
 
   // Step0: project into local frame
@@ -55,6 +55,6 @@ float MicrofacetConductorEvalBRDF(in Material mat, in vec3 normal, in vec3 in_di
   // Fresnel
   vec2 eta_c = vec2(mat.eta, mat.k);
   float F = fresnel_conductor(dot(local_wi, H), eta_c); 
-  result *= mat.specular_reflectance;
-  return F * result;
+  vec3 result1 = vec3(result) * mat.specular_reflectance;
+  return F * result1;
 }

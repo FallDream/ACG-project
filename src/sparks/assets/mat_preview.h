@@ -1,7 +1,7 @@
 namespace sparks{
 
 void Scene::CreateMaterialPreviewScene() {
-  SetCameraToWorld(glm::transpose(glm::mat4{-0.721367, -0.373123, -0.583445, 3.04068, -8.26273e-008, 0.842456, -0.538765, 3.17153, 0.692553, -0.388647, -0.60772, 3.20454, 0, 0, 0, 1}));
+  // SetCameraToWorld(glm::transpose(glm::mat4{-0.721367, -0.373123, -0.583445, 3.04068, -8.26273e-008, 0.842456, -0.538765, 3.17153, 0.692553, -0.388647, -0.60772, 3.20454, 0, 0, 0, 1}));
   SetCameraToWorld(glm::transpose(glm::mat4{-0.721367, -0.373123, 0.583445, 3.04068, -8.26273e-008, 0.842456, 0.538765, 3.17153, 0.692553, -0.388647, 0.60772, 3.20454, 0, 0, 0, 1}));
   float cur_fov = GetCamera().getfov();
   GetCamera().UpdateFov(35 - cur_fov);
@@ -35,7 +35,9 @@ void Scene::CreateMaterialPreviewScene() {
     0.f, //k
     0.1f, // alpha_u
     0.1f, // alpha_v
+    glm::vec3{1.f}, // specular_reflectance
     1.5046f, // interior_ior
+    glm::vec3{1.f}, // specular_transmittance
     1.000277f // exterior_ior
   };
   Material RoughRoughDielectric{
@@ -47,7 +49,9 @@ void Scene::CreateMaterialPreviewScene() {
     0.f, //k
     0.5f, // alpha_u
     0.5f, // alpha_v
+    glm::vec3{1.f}, // specular_reflectance
     1.5046f, // interior_ior
+    glm::vec3{1.f}, // specular_transmittance
     1.000277f // exterior_ior
   };
   Material Stand{

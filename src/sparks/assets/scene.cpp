@@ -8,6 +8,7 @@
 
 #include "sparks/assets/cornellbox.h"
 #include "sparks/assets/mat_preview.h"
+#include "sparks/assets/car_scene.h"
 
 namespace sparks {
 
@@ -390,6 +391,11 @@ Scene::Scene(const std::string &filename) : Scene() {
     CreateCornellBox();
     return;
   }
+  if (filename == "car") {
+    CreateCarScene();
+    return;
+  }
+  
   auto doc = std::make_unique<tinyxml2::XMLDocument>();
   doc->LoadFile(filename.c_str());
   tinyxml2::XMLElement *rootElement = doc->RootElement();
