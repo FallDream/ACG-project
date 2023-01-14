@@ -16,7 +16,7 @@ void SampleDirectionMicrofacetConductor(Material mat, in vec3 normal, in vec3 in
   float pdf;
   // sample half-vector
   vec3 local_m;
-  SampleMicrofacetDistirbution(mat, local_wi, local_m, pdf);
+  SampleMicrofacetDistribution(mat, local_wi, local_m, pdf);
   // perfect specular based on half vector m
   vec3 local_wo = 2 * dot(local_m, local_wi) * local_m - local_wi; 
   // Not valid

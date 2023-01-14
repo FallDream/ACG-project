@@ -46,7 +46,7 @@ float microfacet_eval(Material mat, in vec3 m) {
   }
 }
 
-void SampleMicrofacetDistirbution(in Material mat, in vec3 wi, out vec3 m, out float pdf) {
+void SampleMicrofacetDistribution(in Material mat, in vec3 wi, out vec3 m, out float pdf) {
   // sample a half-vector
   
   // Step1: stretch in coming direction

@@ -24,7 +24,7 @@ void SampleDirectionMicrofacetDielectric(Material mat, in vec3 normal, in vec3 i
   mat_scaled.alpha_v = mat.alpha_v * scale_factor;
   // Sample half vector
   vec3 local_m; float pdf;
-  SampleMicrofacetDistirbution(mat_scaled, local_wi * sign(cos_theta_i), local_m, pdf);
+  SampleMicrofacetDistribution(mat_scaled, local_wi * sign(cos_theta_i), local_m, pdf);
   float cos_theta_t, eta_it, eta_ti;
   float F = fresnel(dot(local_wi, local_m), m_eta, cos_theta_t, eta_it, eta_ti);
   // Select the lobe to be sampled

@@ -54,9 +54,9 @@ HitRecord GetHitRecord(RayPayload ray_payload, vec3 origin, vec3 direction) {
       mat.albedo_color *
       texture(texture_samplers[mat.albedo_texture_id], hit_record.tex_coord)
           .xyz;
-  hit_record.emission = mat.emission;
-  hit_record.emission_strength = mat.emission_strength;
-  hit_record.alpha = mat.alpha;
+  hit_record.emission = mat.emittance;
+  // hit_record.emission_strength = mat.emission_strength;
+  // hit_record.alpha = mat.alpha;
   hit_record.material_type = mat.material_type;
 
   if (dot(hit_record.geometry_normal, hit_record.normal) < 0.0) {

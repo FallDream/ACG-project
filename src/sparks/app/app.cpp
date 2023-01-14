@@ -661,13 +661,6 @@ void App::UpdateDynamicBuffer() {
   global_uniform_object.aspect = float(core_->GetFramebufferWidth()) /
                                  float(core_->GetFramebufferHeight());
 
-  global_uniform_buffer_->operator[](0) = global_uniform_object;
-  global_uniform_object.projection =
-      renderer_->GetScene().GetCamera().GetProjectionMatrix(
-          float(core_->GetFramebufferWidth()) /
-              float(core_->GetFramebufferHeight()),
-          30.0f, 10000.0f);
-  global_uniform_buffer_far_->operator[](0) = global_uniform_object;
   auto &entities = renderer_->GetScene().GetEntities();
   int num_lights = 0;
   for (int i = 0; i < entities.size(); i++) {
@@ -681,8 +674,16 @@ void App::UpdateDynamicBuffer() {
       ++num_lights;
     }
   }
-  guo.num_lights = num_lights;
-  global_uniform_buffer_->operator[](0) = guo;
+  global_uniform_object.num_lights = num_lights;
+
+  global_uniform_buffer_->operator[](0) = global_uniform_object;
+  global_uniform_object.projection =
+      renderer_->GetScene().GetCamera().GetProjectionMatrix(
+          float(core_->GetFramebufferWidth()) /
+              float(core_->GetFramebufferHeight()),
+          30.0f, 10000.0f);
+  global_uniform_buffer_far_->operator[](0) = global_uniform_object;
+
 }
 
 void App::UpdateHostStencilBuffer() {
