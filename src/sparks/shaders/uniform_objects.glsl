@@ -12,8 +12,14 @@ struct GlobalUniformObject {
   int accumulated_sample;
   int num_samples;
   int num_bounces;
-  int num_lights;
   mat4 envmap_from_world;
+  int num_lights;
+  float fov;
+  float aperture;
+  float focal_length;
+  float clamp;
+  float gamma;
+  float aspect;
 };
 
 struct EntityUniformObject {
