@@ -73,7 +73,7 @@ void Scene::CreateMaterialPreviewScene() {
     MATERIAL_TYPE_SPECULAR
   };
 
-  Material mat_to_use = RoughDielectric;
+  Material mat_to_use = Specular;
 
   // Floor
   AddBiiigRectangle(Floor, glm::transpose(glm::mat4{-1.88298, 1.9602, 2.50299e-007, -0.708772, -2.37623e-007, 1.18811e-007, -2.71809, 0, -1.9602, -1.88298, 8.90586e-008, -0.732108, 0, 0, 0, 1}));

@@ -178,8 +178,6 @@ vec3 SampleRay(vec3 origin, vec3 direction) {
       // RR
       throughput /= rr;
 
-      throughput = min(throughput, vec3(100.f));
-
       origin = hit_record.position;
       direction = out_direction;
 
@@ -197,7 +195,7 @@ vec3 SampleRay(vec3 origin, vec3 direction) {
       // }
     }
   }
-  return radiance;
+  return min(radiance, vec3(100.f));
 }
 
 void main() {

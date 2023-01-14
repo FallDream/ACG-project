@@ -34,6 +34,10 @@ class Entity {
   [[nodiscard]] const Material &GetMaterial() const;
   [[nodiscard]] const std::string &GetName() const;
 
+  void ApplyTransform(glm::mat4 transform) {
+    transform_ = transform * transform_;
+  }
+
  private:
   std::unique_ptr<Model> model_;
   Material material_{};

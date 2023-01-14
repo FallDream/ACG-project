@@ -2,15 +2,23 @@ namespace sparks {
 
 void Scene::CreateCarScene() {
   // SetCameraToWorld(glm::transpose(glm::mat4{-0.872027, 0.135655, 0.470284, -8.83707, 0, 0.960826, -0.277154, 5.8377, -0.489459, -0.241685, -0.837865, 14.6207, 0, 0, 0, 1}));
-  SetCameraToWorld(glm::transpose(glm::mat4{-0.872027, 0.135655, -0.470284, -8.83707, 0, 0.960826, 0.277154, 5.8377, -0.489459, -0.241685, 0.837865, 14.6207, 0, 0, 0, 1}));
+  // SetCameraToWorld(glm::transpose(glm::mat4{-0.872027, 0.135655, -0.470284, -8.83707, 0, 0.960826, 0.277154, 5.8377, -0.489459, -0.241685, 0.837865, 14.6207, 0, 0, 0, 1}));
   float cur_fov = GetCamera().getfov();
   GetCamera().UpdateFov(35 - cur_fov);
 
+  glm::mat4 car_matrix = glm::inverse(glm::transpose(glm::mat4{-0.872027, 0.135655, -0.470284, -8.83707, 0, 0.960826, 0.277154, 5.8377, -0.489459, -0.241685, 0.837865, 14.6207, 0, 0, 0, 1}));
+  glm::mat4 rot{1.0f};
+  glm::rotate(rot, glm::radians(30.f), glm::vec3(1.0f, 0.0f, 0.0f));
+  car_matrix = car_matrix * rot;
+  car_matrix = glm::translate(car_matrix, glm::vec3(0, -5, -15.0));
+
+  SetGlobalTransformForNew(car_matrix);
+
   Texture envmap;
-  Texture::Load(u8"../../textures/envmap_matpreview.hdr", envmap);
+  Texture::Load(u8"../../textures/sky.hdr", envmap);
   envmap.SetSampleType(SAMPLE_TYPE_LINEAR);
   envmap_id_ = AddTexture(envmap, "env");
-  envmap_to_world_ = glm::transpose(glm::mat4{-0.922278, 0, 0.386527, 0, 0, 1, 0, 0, -0.386527, 0, -0.922278, 1.17369, 0, 0, 0, 1});
+  // envmap_to_world_ = glm::transpose(glm::mat4{-0.922278, 0, 0.386527, 0, 0, 1, 0, 0, -0.386527, 0, -0.922278, 1.17369, 0, 0, 0, 1});
 
   Material CarPaintBsdf {
     glm::vec3{1.0f}, // albedo
@@ -28,6 +36,7 @@ void Scene::CreateCarScene() {
   };
 
   Material WindowGlassBsdf;
+  // WindowGlassBsdf.material_type = MATERIAL_TYPE_SPECULAR;
   WindowGlassBsdf.material_type = MATERIAL_TYPE_MICROFACET_DIELECTRIC;
   WindowGlassBsdf.alpha_u = 0.f;
   WindowGlassBsdf.alpha_v = 0.f;
@@ -123,9 +132,9 @@ void Scene::CreateCarScene() {
   Mesh::LoadObjFile(u8"../../models/Car_Mesh022.obj", Chrome_0002);
   AddEntity(Chrome_0002, ChromeBsdf, glm::mat4{1.0f});
 
-  Mesh Ground;
-  Mesh::LoadObjFile(u8"../../models/Car_Mesh034.obj", Ground);
-  AddEntity(Ground, GroundBsdf, glm::mat4{1.0f});
+  // Mesh Ground;
+  // Mesh::LoadObjFile(u8"../../models/Car_Mesh034.obj", Ground);
+  // AddEntity(Ground, GroundBsdf, glm::mat4{1.0f});
 
   Mesh InnerBody_0001;
   Mesh::LoadObjFile(u8"../../models/Car_Mesh048.obj", InnerBody_0001);
@@ -362,6 +371,42 @@ void Scene::CreateCarScene() {
   // Mesh ;
   // Mesh::LoadObjFile(u8"../../models/Car_Mesh0.obj", );
   // AddEntity(, Bsdf, glm::mat4{1.0f});
+
+  /* Piano Start Here */
+
+  ResetGlobalTransformForNew();
+
+  Texture PianoTexture;
+  int piano_tex_id = Texture::Load(u8"../../textures/Nero.png", PianoTexture);
+
+  Material PianoBsdf;
+  PianoBsdf.material_type = MATERIAL_TYPE_MICROFACET_DIELECTRIC;
+  PianoBsdf.albedo_texture_id = piano_tex_id;
+  PianoBsdf.alpha_u = 0.f;
+  PianoBsdf.alpha_v = 0.f;
+  PianoBsdf.interior_ior = 1.5f;
+  PianoBsdf.exterior_ior = 1.0f;
+
+  Mesh PianoMesh;
+  Mesh::LoadObjFile(u8"../../models/Piano.obj", PianoMesh);
+
+  glm::mat4 piano_transform{1.0f};
+  piano_transform = glm::rotate(piano_transform, glm::radians(40.f), glm::vec3(0.0, 1.0, 0.0));
+  piano_transform = glm::scale(piano_transform, glm::vec3(0.02f, 0.02f, 0.02f));
+  piano_transform = glm::translate(piano_transform, glm::vec3(80.0f, 0.0f, -300.0f));
+
+  AddEntity(PianoMesh, PianoBsdf, piano_transform);
+
+  /* Ground */
+  Material WorldGroundBsdf;
+  WorldGroundBsdf.material_type = MATERIAL_TYPE_SPECULAR;
+  AddEntity(AcceleratedMesh({{{-10.0f, 0.0f, 10.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+                             {{-10.0f, 0.0f, -10.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 10.0f}},
+                             {{10.0f, 0.0f, 10.0f}, {0.0f, 1.0f, 0.0f}, {10.0f, 0.0f}},
+                             {{10.0f, 0.0f, -10.0f}, {0.0f, 1.0f, 0.0f}, {10.0f, 10.0f}}},
+                            {0, 1, 2, 2, 1, 3}),
+      WorldGroundBsdf, glm::mat4{1.0f});
+
 }
 
 

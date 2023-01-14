@@ -30,6 +30,7 @@ class Scene {
   template <class... Args>
   int AddEntity(Args... args) {
     entities_.emplace_back(args...);
+    entities_.back().ApplyTransform(global_transform_for_new_);
     return int(entities_.size() - 1);
   }
 
@@ -85,6 +86,13 @@ class Scene {
   void CreateMaterialPreviewScene();
   void CreateCarScene();
 
+  void SetGlobalTransformForNew(glm::mat4 mat) {
+    global_transform_for_new_ = mat;
+  }
+  void ResetGlobalTransformForNew() {
+    global_transform_for_new_ = glm::mat4{1.0f};
+  }
+
  private:
   std::vector<Texture> textures_;
   std::vector<std::string> texture_names_;
@@ -103,5 +111,7 @@ class Scene {
   float camera_speed_{3.0f};
   glm::vec3 camera_pitch_yaw_roll_{0.0f, 0.0f, 0.0f};
   Camera camera_{};
+
+  glm::mat4 global_transform_for_new_{1.0f};
 };
 }  // namespace sparks
