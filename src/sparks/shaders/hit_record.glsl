@@ -71,7 +71,7 @@ HitRecord GetHitRecord(RayPayload ray_payload, vec3 origin, vec3 direction) {
     hit_record.tangent = -hit_record.tangent;
   }
 
-  // hit_record.normal = hit_record.geometry_normal;
+  hit_record.normal = hit_record.geometry_normal;
   // hit_record.front_face = true;
   
   return hit_record;

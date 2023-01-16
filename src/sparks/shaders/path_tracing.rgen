@@ -126,12 +126,7 @@ vec3 SampleRay(vec3 origin, vec3 direction) {
         if (!allow_light) break;
         if (hit_record.front_face) {
           vec3 emittance = material.emittance;
-          if (b > 0) {
-            float dist = distance(origin, hit_record.position);
-            radiance += emittance * throughput * max(0.f, dot(-direction, hit_record.normal)) / dist / dist;
-          } else {
-            radiance += emittance * throughput * max(0.f, dot(-direction, hit_record.normal));
-          }
+          radiance += emittance * throughput * max(0.f, dot(-direction, hit_record.normal));
         }
         break;
       }

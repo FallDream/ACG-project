@@ -3,7 +3,6 @@
 #include "math.glsl"
 #include "fresnel.glsl"
 
-// For microfacet material, emittance[0] will be the roughness
 void SampleDirectionMicrofacetConductor(Material mat, in vec3 normal, in vec3 in_dir, out vec3 v, out vec3 bsdf_by_pdf) {
   vec3 wi = -in_dir;
 
